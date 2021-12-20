@@ -10,9 +10,9 @@ class TezosCodec < Formula
   end
   homepage "https://gitlab.com/tezos/tezos"
 
-  url "https://gitlab.com/tezos/tezos.git", :tag => "v11.0+no_adx", :shallow => false
+  url "https://gitlab.com/tezos/tezos.git", :tag => "v12.0-rc1", :shallow => false
 
-  version "v11.0+no_adx-2"
+  version "v12.0-rc1-1"
 
   build_dependencies = %w[pkg-config autoconf rsync wget rustup-init]
   build_dependencies.each do |dependency|
