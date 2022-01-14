@@ -188,7 +188,7 @@ node_postrm_steps = ""
 common_node_env = ["NODE_RPC_ADDR=127.0.0.1:8732", "CERT_PATH=", "KEY_PATH="]
 for network in networks:
     env = [
-        f"DATA_DIR=/var/lib/tezos/node-{network}",
+        f"NODE_DATA_DIR=/var/lib/tezos/node-{network}",
         f"NETWORK={network}",
     ] + common_node_env
     node_units.append(
