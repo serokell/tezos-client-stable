@@ -571,6 +571,28 @@ class TezosBakingServicesPackage(AbstractPackage):
                 prestart_script="tezos-baking-prestart",
             )
         )
+        self.systemd_units.append(
+            SystemdUnit(
+                service_file=ServiceFile(
+                    Unit(
+                        after=[],
+                        description=f"One-shot service to reset custom baking service",
+                    ),
+                    Service(
+                        exec_start="/usr/bin/tezos-baking-custom-reset %i",
+                        user="root",
+                        state_directory="tezos",
+                        environment_file=f"/etc/default/tezos-baking-custom@%i",
+                        remain_after_exit=False,
+                        type_="oneshot",
+                    ),
+                    Install(wanted_by=["multi-user.target"]),
+                ),
+                instances=[],
+                suffix="custom-reset",
+                startup_script="tezos-baking-custom-reset",
+            )
+        )
         self.postinst_steps = ""
         self.postrm_steps = ""
 
