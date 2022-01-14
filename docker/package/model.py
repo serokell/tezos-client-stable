@@ -530,6 +530,47 @@ class TezosBakingServicesPackage(AbstractPackage):
                     prestart_script="tezos-baking-prestart",
                 )
             )
+        custom_requires = []
+        for network in target_networks:
+            for proto in network_protos[network]:
+                custom_requires.append(f"tezos-baker-{proto.lower()}@custom@%i.service")
+                if proto not in self.noendorser_protos:
+                    custom_requires.append(
+                        f"tezos-endorser-{proto.lower()}@custom@%i.service"
+                    )
+        self.systemd_units.append(
+            SystemdUnit(
+                service_file=ServiceFile(
+                    Unit(
+                        after=["network.target"],
+                        requires=["tezos-node-custom@%i"] + custom_requires,
+                        description=f"Tezos baking instance for custom network",
+                    ),
+                    Service(
+                        exec_start="/usr/bin/tezos-baking-start",
+                        user="tezos",
+                        state_directory="tezos",
+                        environment_file=f"/etc/default/tezos-baking-custom@%i",
+                        exec_start_pre=[
+                            "+/usr/bin/setfacl -m u:tezos:rwx /run/systemd/ask-password",
+                            "/usr/bin/tezos-baking-prestart",
+                        ],
+                        exec_stop_post=[
+                            "+/usr/bin/setfacl -x u:tezos /run/systemd/ask-password"
+                        ],
+                        remain_after_exit=True,
+                        type_="oneshot",
+                        keyring_mode="shared",
+                    ),
+                    Install(wanted_by=["multi-user.target"]),
+                ),
+                instances=[],
+                suffix="custom",
+                config_file="tezos-baking-custom.conf",
+                startup_script="tezos-baking-start",
+                prestart_script="tezos-baking-prestart",
+            )
+        )
         self.postinst_steps = ""
         self.postrm_steps = ""
 
