@@ -6,19 +6,23 @@
 # Packages support policy
 
 `tezos-packaging` provides packages for Ubuntu, Fedora and macOS for each stable and release-candidate
-version of the Octez.
+version of Octez.
 
-This document targets to explain which versions of the aforementioned OSes are targeted
+This document describes which versions of the aforementioned OSes are targeted
 by our packages.
 
 ## Ubuntu packages
 
-We provide support for all LTSes supported by Canonical:
+We aim to provide packages for all [Ubuntu LTS releases](https://wiki.ubuntu.com/Releases)
+supported by Canonical.
+
+Currently, these are version:
 * 18.04 LTS (Bionic Beaver)
 * 20.04 LTS (Focal Fossa)
 
-Also, we provide support for non-LTS versions on request from the users.
-E.g. 21.04 (Hirsute Hippo) support was requested in [#212](https://github.com/serokell/tezos-packaging/issues/212).
+When feasible, we also provide support for non-LTS versions on request from the users.
+Currently:
+* 21.04 (Hirsute Hippo) - requested in [#212](https://github.com/serokell/tezos-packaging/issues/212).
 
 There are packages for `arm64` and `amd64` architectures.
 
