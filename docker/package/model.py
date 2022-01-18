@@ -475,6 +475,40 @@ class TezosBakingServicesPackage(AbstractPackage):
     # This should be reset to "" whenever the native version is bumped.
     letter_version = ""
 
+    def __gen_baking_systemd_unit(
+        self, requires, description, environment_file, config_file, suffix
+    ):
+        return SystemdUnit(
+            service_file=ServiceFile(
+                Unit(
+                    after=["network.target"],
+                    requires=requires,
+                    description=description,
+                ),
+                Service(
+                    exec_start="/usr/bin/tezos-baking-start",
+                    user="tezos",
+                    state_directory="tezos",
+                    environment_file=environment_file,
+                    exec_start_pre=[
+                        "+/usr/bin/setfacl -m u:tezos:rwx /run/systemd/ask-password",
+                        "/usr/bin/tezos-baking-prestart",
+                    ],
+                    exec_stop_post=[
+                        "+/usr/bin/setfacl -x u:tezos /run/systemd/ask-password"
+                    ],
+                    remain_after_exit=True,
+                    type_="oneshot",
+                    keyring_mode="shared",
+                ),
+                Install(wanted_by=["multi-user.target"]),
+            ),
+            suffix=suffix,
+            config_file=config_file,
+            startup_script="tezos-baking-start",
+            prestart_script="tezos-baking-prestart",
+        )
+
     def __init__(
         self,
         target_networks: List[str],
@@ -499,35 +533,12 @@ class TezosBakingServicesPackage(AbstractPackage):
                 if proto not in self.noendorser_protos:
                     requires.append(f"tezos-endorser-{proto.lower()}@{network}.service")
             self.systemd_units.append(
-                SystemdUnit(
-                    service_file=ServiceFile(
-                        Unit(
-                            after=["network.target"],
-                            requires=requires,
-                            description=f"Tezos baking instance for {network}",
-                        ),
-                        Service(
-                            exec_start="/usr/bin/tezos-baking-start",
-                            user="tezos",
-                            state_directory="tezos",
-                            environment_file=f"/etc/default/tezos-baking-{network}",
-                            exec_start_pre=[
-                                "+/usr/bin/setfacl -m u:tezos:rwx /run/systemd/ask-password",
-                                "/usr/bin/tezos-baking-prestart",
-                            ],
-                            exec_stop_post=[
-                                "+/usr/bin/setfacl -x u:tezos /run/systemd/ask-password"
-                            ],
-                            remain_after_exit=True,
-                            type_="oneshot",
-                            keyring_mode="shared",
-                        ),
-                        Install(wanted_by=["multi-user.target"]),
-                    ),
-                    suffix=network,
-                    config_file="tezos-baking.conf",
-                    startup_script="tezos-baking-start",
-                    prestart_script="tezos-baking-prestart",
+                self.__gen_baking_systemd_unit(
+                    requires,
+                    f"Tezos baking instance for {network}",
+                    f"/etc/default/tezos-baking-{network}",
+                    "tezos-baking.conf",
+                    network,
                 )
             )
         custom_requires = []
@@ -539,36 +550,12 @@ class TezosBakingServicesPackage(AbstractPackage):
                         f"tezos-endorser-{proto.lower()}@custom@%i.service"
                     )
         self.systemd_units.append(
-            SystemdUnit(
-                service_file=ServiceFile(
-                    Unit(
-                        after=["network.target"],
-                        requires=["tezos-node-custom@%i"] + custom_requires,
-                        description=f"Tezos baking instance for custom network",
-                    ),
-                    Service(
-                        exec_start="/usr/bin/tezos-baking-start",
-                        user="tezos",
-                        state_directory="tezos",
-                        environment_file=f"/etc/default/tezos-baking-custom@%i",
-                        exec_start_pre=[
-                            "+/usr/bin/setfacl -m u:tezos:rwx /run/systemd/ask-password",
-                            "/usr/bin/tezos-baking-prestart",
-                        ],
-                        exec_stop_post=[
-                            "+/usr/bin/setfacl -x u:tezos /run/systemd/ask-password"
-                        ],
-                        remain_after_exit=True,
-                        type_="oneshot",
-                        keyring_mode="shared",
-                    ),
-                    Install(wanted_by=["multi-user.target"]),
-                ),
-                instances=[],
-                suffix="custom",
-                config_file="tezos-baking-custom.conf",
-                startup_script="tezos-baking-start",
-                prestart_script="tezos-baking-prestart",
+            self.__gen_baking_systemd_unit(
+                requires,
+                f"Tezos baking instance for custom network",
+                f"/etc/default/tezos-baking-custom@%i",
+                "tezos-baking-custom.conf",
+                "custom",
             )
         )
         self.systemd_units.append(
