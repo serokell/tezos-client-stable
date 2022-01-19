@@ -58,7 +58,7 @@ This repository provides two distinct ways for building and packaging tezos bina
 
 ## Release process
 
-Please see [release workflow doc](./docs/release-workflow.md) for more information about the details of the `tezos-packaging`
+Please see the [release workflow doc](./docs/release-workflow.md) for more information about the details of the `tezos-packaging`
 releasing process.
 
 ## For Contributors
