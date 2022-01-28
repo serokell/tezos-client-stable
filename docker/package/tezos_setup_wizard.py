@@ -464,7 +464,7 @@ derivation_path_query = Step(
 def get_ledger_url(ledgers):
     return Step(
         id="ledger_url",
-        prompt="Choose ledger to get the new derivation from.",
+        prompt="Choose a ledger to get the new derivation from.",
         options=ledgers,
         default=None,
         validator=Validator([required_field_validator, enum_range_validator(ledgers)]),
@@ -480,7 +480,7 @@ def get_ledger_derivation(ledgers_derivations, node_endpoint):
     extra_options = ["Specify derivation path", "Go back"]
     return Step(
         id="ledger_derivation",
-        prompt="Select a key to import from ledger.\n"
+        prompt="Select a key to import from the ledger.\n"
         "You can choose one of the suggested derivations or provide your own:",
         help="'Specify derivation path' will ask a derivation path from you."
         "'Go back' will return you back to the key type choice.",
