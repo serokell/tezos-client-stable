@@ -227,8 +227,12 @@ def wait_for_ledger_baking_app():
         proc_call("sleep 1")
     ledgers_derivations = {}
     for ledger_derivation in re.findall(ledger_regex, output):
-        ledger_url = re.search(b"ledger:\/\/[\w\-]+\/", ledger_derivation).group(0).decode()
-        derivation_path = re.search(derivation_path_regex, ledger_derivation).group(0).decode()
+        ledger_url = (
+            re.search(b"ledger:\/\/[\w\-]+\/", ledger_derivation).group(0).decode()
+        )
+        derivation_path = (
+            re.search(derivation_path_regex, ledger_derivation).group(0).decode()
+        )
         ledgers_derivations.setdefault(ledger_url, []).append(derivation_path)
     return ledgers_derivations
 
@@ -272,9 +276,9 @@ def ledger_urls_info(ledgers_derivations, node_endpoint):
                 .strip()
             )
             ledgers_info.setdefault(ledger_url, []).append(
-                ("{:" + str(max_derivation_len + 1) + "} address: {}, balance: {}").format(
-                    derivation_path + ",", addr, balance
-                )
+                (
+                    "{:" + str(max_derivation_len + 1) + "} address: {}, balance: {}"
+                ).format(derivation_path + ",", addr, balance)
             )
     return ledgers_info
 
@@ -869,8 +873,12 @@ class Setup:
                                         "P-256",
                                     ]
                                     for signing_curve in signing_curves:
-                                        ledgers_derivations.setdefault(ledger_url, []).append(
-                                            signing_curve + "/" + self.config["derivation_path"]
+                                        ledgers_derivations.setdefault(
+                                            ledger_url, []
+                                        ).append(
+                                            signing_curve
+                                            + "/"
+                                            + self.config["derivation_path"]
                                         )
                             else:
                                 baker_ledger_url = self.config["ledger_derivation"]
