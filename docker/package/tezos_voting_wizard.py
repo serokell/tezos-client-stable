@@ -183,10 +183,17 @@ class Setup(Setup):
             self.config["network"] = "custom@" + self.config["custom_network_name"]
 
     def fill_voting_period_info(self):
-        info = get_proc_output(
+        voting_proc = get_proc_output(
             f"sudo -u tezos {suppress_warning_text} tezos-client "
             f"{self.config['tezos_client_options']} show voting period"
-        ).stdout
+        )
+        if voting_proc.returncode == 0:
+            info = voting_proc.stdout
+        else:
+            print(
+                "Couldn't get the voting period info. Please check that the network",
+                "for voting has been set up correctly.",
+            )
 
         self.config["amendment_phase"] = (
             re.search(b'Current period: "(\w+)"', info).group(1).decode("utf-8")
