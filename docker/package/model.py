@@ -562,6 +562,7 @@ class TezosBakingServicesPackage(AbstractPackage):
 
     def fetch_sources(self, out_dir):
         os.makedirs(out_dir)
+        shutil.copy(f"{os.path.dirname(__file__)}/wizard_structure.py", out_dir)
         shutil.copy(f"{os.path.dirname(__file__)}/tezos_setup_wizard.py", out_dir)
         shutil.copy(f"{os.path.dirname(__file__)}/tezos_voting_wizard.py", out_dir)
 
@@ -645,6 +646,9 @@ BINDIR=/usr/bin
 
 tezos-baking:
 
+wizard-structure:
+	mv $(CURDIR)/wizard_structure.py $(CURDIR)/wizard_structure.py
+
 tezos-setup-wizard:
 	mv $(CURDIR)/tezos_setup_wizard.py $(CURDIR)/tezos-setup-wizard
 	chmod +x $(CURDIR)/tezos-setup-wizard
@@ -653,8 +657,9 @@ tezos-voting-wizard:
 	mv $(CURDIR)/tezos_voting_wizard.py $(CURDIR)/tezos-voting-wizard
 	chmod +x $(CURDIR)/tezos-voting-wizard
 
-install: tezos-baking tezos-setup-wizard tezos-voting-wizard
+install: wizard-structure tezos-baking tezos-setup-wizard tezos-voting-wizard
 	mkdir -p $(DESTDIR)$(BINDIR)
+	cp $(CURDIR)/wizard_structure.py $(DESTDIR)$(BINDIR)/wizard_structure.py
 	cp $(CURDIR)/tezos-setup-wizard $(DESTDIR)$(BINDIR)/tezos-setup-wizard
 	cp $(CURDIR)/tezos-voting-wizard $(DESTDIR)$(BINDIR)/tezos-voting-wizard
 """
