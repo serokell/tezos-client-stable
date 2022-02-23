@@ -127,7 +127,7 @@ def get_proposal_period_hash(hashes):
 ballot_outcome_query = Step(
     id="ballot_outcome",
     prompt="Choose the outcome for your ballot.",
-    help="'yay' is for supporting the proposal, 'nay' is for rejecting the proposal, "
+    help="'yay' is for supporting the proposal, 'nay' is for rejecting the proposal,\n"
     "'pass' is used to not influence a vote but still contribute to reaching a quorum.",
     default=None,
     options=ballot_outcomes,
