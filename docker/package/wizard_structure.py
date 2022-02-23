@@ -12,6 +12,14 @@ the appropriate steps using the final configuration.
 import os, sys, subprocess, shlex
 import re, textwrap
 
+# Regexes
+
+secret_key_regex = b"(encrypted|unencrypted):(?:\w{54}|\w{88})"
+protocol_hash_regex = (
+    b"P[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50}"
+)
+
+
 # Input validators
 
 
