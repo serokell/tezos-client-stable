@@ -44,6 +44,12 @@ def enum_range_validator(options):
     return _validator
 
 
+def dirpath_validator(input):
+    if input and not os.path.isdir(input):
+        raise ValueError("Please input a valid path to a directory.")
+    return input
+
+
 def filepath_validator(input):
     if input and not os.path.isfile(input):
         raise ValueError("Please input a valid file path.")
