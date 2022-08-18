@@ -18,5 +18,5 @@ tezos_client="/usr/bin/tezos-client"
 while ! "$tezos_client" --endpoint "$NODE_RPC_ENDPOINT" rpc list &> /dev/null; do sleep 1; done
 
 "$node" --endpoint "$NODE_RPC_ENDPOINT" \
-    run "$MODE" for "$ROLLUP_ALIAS" \
+    run "$ROLLUP_MODE" for "$ROLLUP_ALIAS" \
     --data-dir "$DATA_DIR" &
