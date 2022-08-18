@@ -442,7 +442,6 @@ packages.append(
 
 
 def mk_rollup_packages():
-
     def mk_units(type, proto):
         startup_script = "/usr/bin/tezos-rollup-node-start"
         service_file = ServiceFile(
@@ -454,7 +453,9 @@ def mk_rollup_packages():
                     "+/usr/bin/setfacl -m u:tezos:rwx /run/systemd/ask-password"
                 ],
                 exec_start=startup_script,
-                exec_stop_post=["+/usr/bin/setfacl -x u:tezos /run/systemd/ask-password"],
+                exec_stop_post=[
+                    "+/usr/bin/setfacl -x u:tezos /run/systemd/ask-password"
+                ],
                 state_directory="tezos",
                 user="tezos",
                 type_="forking",
@@ -479,7 +480,11 @@ def mk_rollup_packages():
             meta=packages_meta,
             systemd_units=mk_units(type, proto) if name == "node" else [],
             target_proto=proto,
-            additional_native_deps=["tezos-client", "tezos-node", "tezos-sapling-params"],
+            additional_native_deps=[
+                "tezos-client",
+                "tezos-node",
+                "tezos-sapling-params",
+            ],
             postinst_steps=daemon_postinst_common,
             dune_filepath=f"src/proto_{proto_snake_case}/bin_{type}_rollup_{name}/main_{type}_rollup_{name}_{proto_snake_case}.exe",
         )
