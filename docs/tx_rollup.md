@@ -26,4 +26,4 @@ After that, with the active `tezos-node` service available with the provided uri
 sudo systemctl start tezos-tx-rollup-node-$proto.service
 ```
 
-For futher details, see [documentation](https://gitlab.com/tezos/tezos/-/blob/master/docs/jakarta/transaction_rollups.rst).
+For futher details, see [the documentation](http://tezos.gitlab.io/active/transaction_rollups.html).
