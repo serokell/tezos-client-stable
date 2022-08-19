@@ -447,7 +447,7 @@ def mk_rollup_packages():
         service_file = ServiceFile(
             Unit(after=["network.target"], description=f"Tezos {type} rollup node"),
             Service(
-                environment_file=f"/etc/default/tezos-{type}-rollup-node",
+                environment_file=f"/etc/default/tezos-{type}-rollup-node-{proto}",
                 environment=[f"PROTOCOL={proto}"],
                 exec_start_pre=[
                     "+/usr/bin/setfacl -m u:tezos:rwx /run/systemd/ask-password"
