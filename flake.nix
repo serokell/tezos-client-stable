@@ -9,6 +9,7 @@
   inputs = {
 
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:serokell/nixpkgs?rev=1dfdbb65d77430fc0935e8592d0abc4addcce711";
 
     nix.url = "github:nixos/nix";
 
