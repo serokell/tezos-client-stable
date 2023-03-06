@@ -28,12 +28,17 @@ shutil.rmtree(os.path.join("tezos", ".git"))
 
 subprocess.run(["git", "clone", "https://gitlab.com/tezos/opam-repository.git"])
 
-with open("tezos/scripts/version.sh", "r") as f:
-    opam_repository_tag = re.search(
-        "^export opam_repository_tag=([0-9a-z]*)", f.read(), flags=re.MULTILINE
-    ).group(1)
-    os.chdir("opam-repository")
-    subprocess.run(["git", "checkout", opam_repository_tag])
-    subprocess.run(["rm", "-rf", ".git"])
-    subprocess.run(["rm", "-r", "zcash-params"])
-    subprocess.run(["opam", "admin", "cache"])
+with open("get_opam_tag.sh", "w") as f:
+    f.write("source ./tezos/scripts/version.sh; echo $opam_repository_tag")
+
+opam_repository_tag = (
+    subprocess.run(["bash", "get_opam_tag.sh"], stdout=subprocess.PIPE)
+    .stdout.decode()
+    .strip()
+)
+
+os.chdir("opam-repository")
+subprocess.run(["git", "checkout", opam_repository_tag])
+subprocess.run(["rm", "-rf", ".git"])
+subprocess.run(["rm", "-r", "zcash-params"])
+subprocess.run(["opam", "admin", "cache"])
