@@ -28,11 +28,12 @@ shutil.rmtree(os.path.join("tezos", ".git"))
 
 subprocess.run(["git", "clone", "https://gitlab.com/tezos/opam-repository.git"])
 
-with open("get_opam_tag.sh", "w") as f:
-    f.write("source ./tezos/scripts/version.sh; echo $opam_repository_tag")
-
 opam_repository_tag = (
-    subprocess.run(["bash", "get_opam_tag.sh"], stdout=subprocess.PIPE)
+    subprocess.run(
+        ". ./tezos/scripts/version.sh; echo $opam_repository_tag",
+        stdout=subprocess.PIPE,
+        shell=True,
+    )
     .stdout.decode()
     .strip()
 )
