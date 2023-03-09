@@ -451,11 +451,11 @@
     "tezos": {
       "flake": false,
       "locked": {
-        "lastModified": 1678138372,
-        "narHash": "sha256-rQywkJAVALkCQXGvpBnZueRiilIyMsmn+yHdJJkgXco=",
+        "lastModified": 1669890058,
+        "narHash": "sha256-d7RjWP30CpxmuRJW3zxEB8CcUqohj10t4Z4K6zq9oPs=",
         "owner": "tezos",
         "repo": "tezos",
-        "rev": "a40d1a286e614c29aeb5e382ca802f1655c567e7",
+        "rev": "763259c5131a5cc8054151596f0f59ffb505f0fc",
         "type": "gitlab"
       },
       "original": {
