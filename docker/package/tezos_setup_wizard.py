@@ -77,7 +77,7 @@ Type in 'exit' to quit.
 def fetch_snapshot(url):
     print("Downloading the snapshot from", url)
     filename = TMP_SNAPSHOT_LOCATION
-    urllib.request.urlretrieve(url, filename, progressbar_hook)
+    proc_call(f"wget --show-progress --continue -O {filename} {url}")
     print()
     return filename
 
