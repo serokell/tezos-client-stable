@@ -8,7 +8,9 @@
 
 # Don't add udev rules in case the package is installed inside either docker or podman container.
 # Otherwise, post-installation script will fail due to inability to non-zero exit code of the
-# 'udevadm control --reload-rules' call
+# 'udevadm control --reload-rules' call.
+# Since containers orchestrated by Kubernetes don't contain any indicator files, check k8s-specific
+# env var.
 if [ ! -f /.dockerenv ] && [ ! -f /.containerenv ] && [ -z "${KUBERNETES_SERVICE_HOST++}" ] ; then
     cat <<EOF > /etc/udev/rules.d/20-hw1.rules
 # HW.1 / Nano
